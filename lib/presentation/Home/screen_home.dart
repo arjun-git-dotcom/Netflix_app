@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:netflix_app/application/controller/controller_movie.dart';
+import 'package:netflix_app/application/model/movie_model.dart';
 import 'package:netflix_app/core/colors.dart';
 import 'package:netflix_app/core/constants.dart';
 import 'package:netflix_app/presentation/Home/Title.dart';
@@ -7,8 +9,35 @@ import 'package:netflix_app/presentation/Home/custombutton.dart';
 import 'package:netflix_app/presentation/Home/numberCard.dart';
 import 'package:netflix_app/presentation/screen_search/title.dart';
 
-class ScreenHome extends StatelessWidget {
+const String imageBase = 'https://image.tmdb.org/t/p/w500/';
+
+class ScreenHome extends StatefulWidget {
   const ScreenHome({super.key});
+
+  @override
+  State<ScreenHome> createState() => _ScreenHomeState();
+}
+
+class _ScreenHomeState extends State<ScreenHome> {
+  List nowplaying = [];
+  List toprated = [];
+  List popular = [];
+  List upcoming = [];
+
+  Future getAllmovies() async {
+    nowplaying = await MovieServices.getNowPlaying();
+    toprated = await MovieServices.getTopRated();
+    popular = await MovieServices.getNowPopular();
+    upcoming = await MovieServices.getUpcoming();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getAllmovies();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,23 +112,42 @@ class ScreenHome extends StatelessWidget {
                             ],
                           ),
                           const MyWidget(title: 'Released in the Past year'),
-                          RefactorPoster(widgetsize: widgetsize),
+                          RefactorPoster(
+                              widgetsize: widgetsize,
+                              movies: nowplaying,
+                              title: 'Released in the Past year'),
                           const MyWidget(title: 'Trending Now'),
-                          RefactorPoster(widgetsize: widgetsize),
+                          RefactorPoster(
+                            widgetsize: widgetsize,
+                            title: 'Trending Now',
+                            movies: popular,
+                          ),
                           const MyWidget(title: 'Top 10 shows in TV'),
                           LimitedBox(
                             maxHeight: 200,
                             child: ListView(
                                 scrollDirection: Axis.horizontal,
                                 children: List.generate(
-                                    10,
+                                    popular.length,
                                     (index) => Numbercard(
-                                        widgetsize: widgetsize, index: index))),
+                                          widgetsize: widgetsize,
+                                          index: index,
+                                          url: imageBase +
+                                              popular[index].imagePath,
+                                        ))),
                           ),
                           const MyWidget(title: 'Tense Dramas'),
-                          RefactorPoster(widgetsize: widgetsize),
+                          RefactorPoster(
+                            widgetsize: widgetsize,
+                            title: 'Tense Dramas',
+                            movies: upcoming,
+                          ),
                           const MyWidget(title: 'South Indian Movies'),
-                          RefactorPoster(widgetsize: widgetsize),
+                          RefactorPoster(
+                            widgetsize: widgetsize,
+                            title: 'South Indian Movies',
+                            movies: upcoming,
+                          ),
                         ],
                       ),
                       scrollNotifier.value == true
@@ -167,12 +215,15 @@ class ScreenHome extends StatelessWidget {
 }
 
 class RefactorPoster extends StatelessWidget {
-  const RefactorPoster({
-    super.key,
-    required this.widgetsize,
-  });
+  const RefactorPoster(
+      {super.key,
+      required this.widgetsize,
+      required this.movies,
+      required this.title});
 
   final Size widgetsize;
+  final List movies;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -181,31 +232,29 @@ class RefactorPoster extends StatelessWidget {
       child: ListView(
           scrollDirection: Axis.horizontal,
           children: List.generate(
-              10,
+              movies.length,
               (index) => ImageContainer(
                     widgetsize: widgetsize,
+                    image: imageBase + movies[index].imagePath,
                   ))),
     );
   }
 }
 
 class ImageContainer extends StatelessWidget {
-  const ImageContainer({
-    super.key,
-    required this.widgetsize,
-  });
+  const ImageContainer(
+      {super.key, required this.widgetsize, required this.image});
 
   final Size widgetsize;
+  final String image;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: widgetsize.height * 0.4,
       width: widgetsize.width * 0.4,
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: NetworkImage(
-                  'https://media.themoviedb.org/t/p/w220_and_h330_face/iADOJ8Zymht2JPMoy3R7xceZprc.jpg'))),
+      decoration:
+          BoxDecoration(image: DecorationImage(image: NetworkImage(image))),
     );
   }
 }

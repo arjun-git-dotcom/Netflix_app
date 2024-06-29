@@ -6,8 +6,9 @@ import 'package:netflix_app/presentation/Home/screen_home.dart';
 class Numbercard extends StatelessWidget {
   final Size widgetsize;
   final int index;
+  final String url;
 
-  const Numbercard({required this.widgetsize, required this.index, super.key});
+  const Numbercard({required this.widgetsize, required this.index,required this.url, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,10 @@ class Numbercard extends StatelessWidget {
             const SizedBox(
               width: 20,
             ),
-            ImageContainer(widgetsize: widgetsize),
+            ImageContainer(
+              widgetsize: widgetsize,
+              image: imageBase+url,
+            ),
           ],
         ),
         Positioned(
