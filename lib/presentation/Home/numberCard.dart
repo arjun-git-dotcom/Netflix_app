@@ -21,7 +21,7 @@ class Numbercard extends StatelessWidget {
             ),
             ImageContainer(
               widgetsize: widgetsize,
-              image: imageBase+url,
+              image: url,
             ),
           ],
         ),

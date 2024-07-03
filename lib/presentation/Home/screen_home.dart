@@ -178,7 +178,11 @@ class _ScreenHomeState extends State<ScreenHome> {
                                       Container(
                                         height: 30,
                                         width: 30,
-                                        color: widgetblue,
+                                        decoration: const BoxDecoration(
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                    'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpng.pngtree.com%2Fpng-clipart%2F20210727%2Fourmid%2Fpngtree-smiling-blue-square-geometric-emoji-png-image_3716651.jpg&f=1&nofb=1&ipt=863c3dc603b733118831018222e75205cbf4a6516bc7d6ba04de002573393bf8&ipo=images'),
+                                                fit: BoxFit.cover)),
                                       )
                                     ],
                                   ),

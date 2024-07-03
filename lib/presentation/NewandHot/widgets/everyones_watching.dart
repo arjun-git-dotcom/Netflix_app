@@ -2,36 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:netflix_app/core/colors.dart';
 import 'package:netflix_app/core/constants.dart';
 import 'package:netflix_app/presentation/Home/custombutton.dart';
+import 'package:netflix_app/presentation/Home/screen_home.dart';
 
 class Everyoneswatchingwidget extends StatelessWidget {
-  const Everyoneswatchingwidget({
-    super.key,
-  });
+  final String image;
+  final String moviename;
+  final String desc;
+  const Everyoneswatchingwidget(
+      {super.key,
+      required this.image,
+      required this.moviename,
+      required this.desc});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            'Friends',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            moviename,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
-        const Text(
-          'This sitcom follows six 20 plus something friends who have diarrhea.',
-          style: TextStyle(color: Colors.grey),
+        Text(
+          desc,
+          style: const TextStyle(color: Colors.grey),
         ),
         kheight(50),
         Stack(
           children: [
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(
-                          "https://media.themoviedb.org/t/p/w533_and_h300_bestv2/tRS6jvPM9qPrrnx2KRp3ew96Yot.jpg"),
-                      fit: BoxFit.fill)),
+                      image: NetworkImage(image), fit: BoxFit.cover)),
               height: 200,
               width: MediaQuery.of(context).size.width,
             ),

@@ -3,21 +3,39 @@ import 'package:flutter/material.dart';
 import 'package:netflix_app/presentation/screen_search/searchdynamic.dart';
 import 'package:netflix_app/presentation/screen_search/searchidel.dart';
 
-class Search extends StatelessWidget {
+class Search extends StatefulWidget {
   const Search({super.key});
 
   @override
+  State<Search> createState() => _SearchState();
+}
+
+class _SearchState extends State<Search> {
+  bool isListview = true;
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Column(
         children: [
           CupertinoSearchTextField(
             backgroundColor: Colors.grey,
-            prefixIcon: Icon(Icons.search),
-            suffixIcon: Icon(Icons.cancel),
+            prefixIcon: const Icon(Icons.search),
+            suffixIcon: const Icon(Icons.cancel),
+            onTap: () {
+              setState(() {
+                isListview = false;
+              });
+            },
+            onSubmitted: (value) {
+              if (value.isEmpty) {
+                isListview = true;
+              }
+            },
           ),
-          Expanded(child: SearchIdle()),
-          // Expanded(child: Searchdynamic())
+          Expanded(
+              child: isListview == true
+                  ? const SearchIdle()
+                  : const Searchdynamic()),
         ],
       ),
     );

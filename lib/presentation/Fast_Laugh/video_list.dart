@@ -1,20 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:netflix_app/core/colors.dart';
 import 'package:netflix_app/core/constants.dart';
+import 'package:video_player/video_player.dart';
 
 class VideoList extends StatelessWidget {
   final int index;
-  const VideoList({required this.index, super.key});
+  final String videoUrl;
+  const VideoList({required this.index, required this.videoUrl, super.key});
 
   @override
   Widget build(BuildContext context) {
-    Size widgetsize = MediaQuery.of(context).size;
     return Stack(children: [
-      Container(
-        color: Colors.accents[index % Colors.accents.length],
-      ),
+      VideoPlayerWidget(videoUrl: videoUrl),
       const Align(
         alignment: Alignment.bottomLeft,
         child: Padding(
@@ -98,6 +95,48 @@ class VideoActionWidgets extends StatelessWidget {
           title,
         ),
       ],
+    );
+  }
+}
+
+class VideoPlayerWidget extends StatefulWidget {
+  final String videoUrl;
+  const VideoPlayerWidget({required this.videoUrl, super.key});
+
+  @override
+  State<VideoPlayerWidget> createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends State<VideoPlayerWidget> {
+  VideoPlayerController? _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
+    _controller!.initialize().then((_) => setState(() {
+          _controller!.play();
+        }));
+    _controller!.setLooping(true);
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: AspectRatio(
+        aspectRatio: 9 / 16,
+        child: Stack(
+          children: [VideoPlayer(_controller!)],
+        ),
+      ),
     );
   }
 }

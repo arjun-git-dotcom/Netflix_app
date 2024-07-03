@@ -4,9 +4,14 @@ import 'package:netflix_app/core/constants.dart';
 import 'package:netflix_app/presentation/Home/custombutton.dart';
 
 class ComingSoonWidget extends StatelessWidget {
-  const ComingSoonWidget({
-    super.key,
-  });
+  final String image;
+  final String title;
+  final String desc;
+  const ComingSoonWidget(
+      {super.key,
+      required this.image,
+      required this.title,
+      required this.desc});
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +46,9 @@ class ComingSoonWidget extends StatelessWidget {
               Stack(
                 children: [
                   Container(
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: NetworkImage(
-                                "https://media.themoviedb.org/t/p/w533_and_h300_bestv2/tRS6jvPM9qPrrnx2KRp3ew96Yot.jpg"),
-                            fit: BoxFit.fill)),
+                            image: NetworkImage(image), fit: BoxFit.cover)),
                     height: 200,
                     width: 300,
                   ),
@@ -65,9 +68,11 @@ class ComingSoonWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'The Batman',
-                    style: TextStyle(fontSize: 30, letterSpacing: -3),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(fontSize: 30, letterSpacing: -3),
+                    ),
                   ),
                   kwidth(70),
                   Row(
@@ -84,13 +89,14 @@ class ComingSoonWidget extends StatelessWidget {
               ),
               const Text('coming on friday'),
               kheight(10),
-              const Text(
-                'The Batman',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Text(
+                title,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              const Text(
-                'Bruce Wayne is a rich orphan who has a big issue which is kept secret,he is always horny.So he decides to solve the problem by buying a product online to make him less horny but the product made him go for a rampage.',
-                style: TextStyle(color: Colors.grey),
+              Text(
+                desc,
+                style: const TextStyle(color: Colors.grey),
               ),
               kheight(80)
             ],

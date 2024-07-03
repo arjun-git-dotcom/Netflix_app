@@ -1,10 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:netflix_app/application/controller/controller_movie.dart';
 import 'package:netflix_app/core/colors.dart';
+import 'package:netflix_app/presentation/Home/screen_home.dart';
 
 import 'package:netflix_app/presentation/screen_search/title.dart';
 
-class SearchIdle extends StatelessWidget {
+class SearchIdle extends StatefulWidget {
   const SearchIdle({super.key});
+
+  @override
+  State<SearchIdle> createState() => _SearchIdleState();
+}
+
+class _SearchIdleState extends State<SearchIdle> {
+  List idealposters = [];
+  Future idealmovies() async {
+    idealposters = await MovieServices.getNowPopular();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    idealmovies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +39,12 @@ class SearchIdle extends StatelessWidget {
                 separatorBuilder: (context, index) => const SizedBox(
                       height: 10,
                     ),
-                itemCount: 10,
+                itemCount: idealposters.length,
                 itemBuilder: (context, index) {
-                  return const Imagecontainer();
+                  return Imagecontainer(
+                    image: imageBase + idealposters[index].imagePath,
+                    title: idealposters[index].title,
+                  );
                 }),
           ),
         )
@@ -31,9 +54,9 @@ class SearchIdle extends StatelessWidget {
 }
 
 class Imagecontainer extends StatelessWidget {
-  const Imagecontainer({
-    super.key,
-  });
+  final String image;
+  final String title;
+  const Imagecontainer({super.key, required this.image, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +66,15 @@ class Imagecontainer extends StatelessWidget {
         Container(
           height: widgetsize.height * 0.14,
           width: widgetsize.width * 0.4,
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: NetworkImage(
-                      'https://media.themoviedb.org/t/p/w533_and_h300_bestv2/H5HjE7Xb9N09rbWn1zBfxgI8uz.jpg'))),
+          decoration:
+              BoxDecoration(image: DecorationImage(image: NetworkImage(image))),
         ),
         const SizedBox(width: 10),
-        const Text(
-          'Nice Guys',
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+        Expanded(
+          child: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+          ),
         ),
         const Spacer(),
         const CircleAvatar(
